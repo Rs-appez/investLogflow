@@ -19,6 +19,7 @@ env = environ.Env()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 env_file = os.path.join(BASE_DIR, ".env")
+environ.Env.read_env(env_file)
 
 
 # Quick-start development settings - unsuitable for production
@@ -40,8 +41,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # my apps
     "apps.tracker",
+    "apps.users",
 ]
 
 MIDDLEWARE = [
@@ -87,6 +88,8 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
+
+AUTH_USER_MODEL = "users.User"
 
 AUTH_PASSWORD_VALIDATORS = [
     {
