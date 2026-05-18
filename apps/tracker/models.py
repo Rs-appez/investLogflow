@@ -1,3 +1,73 @@
+from typing import override
+
 from django.db import models
 
-# Create your models here.
+from apps.users.models import Organization
+
+
+class FinancialProduct(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+
+    @override
+    def __str__(self):
+        return self.name
+
+
+class ETF(FinancialProduct):
+    ticker = models.CharField(max_length=10, unique=True)
+
+    @override
+    def __str__(self):
+        return f"{self.name} ({self.ticker})"
+
+
+class Stock(FinancialProduct):
+    ticker = models.CharField(max_length=10, unique=True)
+
+    @override
+    def __str__(self):
+        return f"{self.name} ({self.ticker})"
+
+
+class Bond(FinancialProduct):
+    issuer = models.CharField(max_length=255)
+    maturity_date = models.DateField()
+
+    @override
+    def __str__(self):
+        return f"{self.name} issued by {self.issuer}, maturing on {self.maturity_date}"
+
+
+class ActualPrice(models.Model):
+    product = models.ForeignKey(FinancialProduct, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=12, decimal_places=2)
+    date_recorded = models.DateTimeField(auto_now_add=True)
+
+    @override
+    def __str__(self):
+        return f"Price of {self.product.name} on {self.date_recorded}: {self.price}"
+
+
+class Investment(models.Model):
+    product = models.ForeignKey(FinancialProduct, on_delete=models.CASCADE)
+    amount_invested = models.DecimalField(max_digits=12, decimal_places=2)
+    quantity = models.DecimalField(max_digits=24, decimal_places=6)
+    date_invested = models.DateTimeField(auto_now_add=True)
+
+    @override
+    def __str__(self):
+        return f"Investment in {self.product.name} on {self.date_invested}"
+
+
+class Portfolio(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
+    investments = models.ManyToManyField(Investment, related_name="portfolios")
+    organization = models.ForeignKey(
+        Organization, on_delete=models.CASCADE, related_name="portfolios"
+    )
+
+    @override
+    def __str__(self):
+        return self.name
