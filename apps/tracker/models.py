@@ -5,8 +5,9 @@ from django.db import models
 from apps.users.models import Organization
 
 
-class FinancialProduct(models.Model):
+class Stock(models.Model):
     name = models.CharField(max_length=255)
+    ticker = models.CharField(max_length=10, unique=True)
     active = models.BooleanField()
     cik = models.CharField(max_length=20)
     currency = models.CharField(max_length=10)
@@ -16,36 +17,11 @@ class FinancialProduct(models.Model):
 
     @override
     def __str__(self):
-        return self.name
-
-
-class ETF(FinancialProduct):
-    ticker = models.CharField(max_length=10, unique=True)
-
-    @override
-    def __str__(self):
         return f"{self.name} ({self.ticker})"
-
-
-class Stock(FinancialProduct):
-    ticker = models.CharField(max_length=10, unique=True)
-
-    @override
-    def __str__(self):
-        return f"{self.name} ({self.ticker})"
-
-
-class Bond(FinancialProduct):
-    issuer = models.CharField(max_length=255)
-    maturity_date = models.DateField()
-
-    @override
-    def __str__(self):
-        return f"{self.name} issued by {self.issuer}, maturing on {self.maturity_date}"
 
 
 class ActualPrice(models.Model):
-    product = models.ForeignKey(FinancialProduct, on_delete=models.CASCADE)
+    product = models.ForeignKey(Stock, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=12, decimal_places=2)
     date_recorded = models.DateTimeField(auto_now_add=True)
 
@@ -55,7 +31,7 @@ class ActualPrice(models.Model):
 
 
 class Investment(models.Model):
-    product = models.ForeignKey(FinancialProduct, on_delete=models.CASCADE)
+    product = models.ForeignKey(Stock, on_delete=models.CASCADE)
     amount_invested = models.DecimalField(max_digits=12, decimal_places=2)
     quantity = models.DecimalField(max_digits=24, decimal_places=6)
     date_invested = models.DateTimeField(auto_now_add=True)
