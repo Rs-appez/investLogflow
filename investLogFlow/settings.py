@@ -26,6 +26,7 @@ environ.Env.read_env(env_file)
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 SECRET_KEY = env("SECRET_KEY")
+API_KEY = env("API_KEY")
 
 DEBUG = env.bool("DEBUG", default=False)
 
