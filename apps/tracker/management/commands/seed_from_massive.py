@@ -37,9 +37,9 @@ class Command(BaseCommand):
                             "active": item.get("active", False),
                             "cik": item.get("cik", ""),
                             "currency": item.get("currency", ""),
-                            "primary_exchange": item.get("primaryExchange", ""),
-                            "composite_figi": item.get("compositeFigi", ""),
-                            "share_class_figi": item.get("shareClassFigi", ""),
+                            "primary_exchange": item.get("primary_exchange", ""),
+                            "composite_figi": item.get("composite_figi", ""),
+                            "share_class_figi": item.get("share_class_figi", ""),
                         },
                     )
                     if created:
