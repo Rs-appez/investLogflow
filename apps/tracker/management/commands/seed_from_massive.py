@@ -1,9 +1,12 @@
+from itertools import islice
 from typing import override
 
 from django.core.management.base import BaseCommand
 
 from apps.tracker.models import Stock
 from apps.tracker.utils import fetch_financial_products_from_massive
+
+BATCH_SIZE = 500
 
 
 class Command(BaseCommand):
@@ -25,32 +28,39 @@ class Command(BaseCommand):
             )
             return
         try:
-            data_fetch = fetch_financial_products_from_massive()
-            nb_created = 0
-            nb_updated = 0
-            for item in data_fetch:
-                if item.get("market") == "stocks":
-                    _, created = Stock.objects.update_or_create(
-                        ticker=item.get("ticker"),
-                        defaults={
-                            "name": item.get("name", ""),
-                            "active": item.get("active", False),
-                            "cik": item.get("cik", ""),
-                            "currency": item.get("currency", ""),
-                            "primary_exchange": item.get("primary_exchange", ""),
-                            "composite_figi": item.get("composite_figi", ""),
-                            "share_class_figi": item.get("share_class_figi", ""),
-                        },
+            total_created = 0
+            total_updated = 0
+            gen = fetch_financial_products_from_massive()
+
+            for batch in iter(lambda: list(islice(gen, BATCH_SIZE)), []):
+                objs = [
+                    Stock(
+                        name=item.get("name", ""),
+                        ticker=item.get("ticker", ""),
+                        active=item.get("active", False),
+                        cik=item.get("cik", ""),
+                        currency=item.get("currency", ""),
+                        primary_exchange=item.get("primary_exchange", ""),
+                        composite_figi=item.get("composite_figi", ""),
+                        share_class_figi=item.get("share_class_figi", ""),
                     )
-                    if created:
-                        nb_created += 1
-                    else:
-                        nb_updated += 1
+                    for item in batch
+                ]
+                result = Stock.objects.bulk_create(
+                    objs,
+                    update_conflicts=True,
+                    unique_fields=["ticker"],
+                    update_fields=[
+                        f.name
+                        for f in Stock._meta.fields
+                        if f.name not in ("id", "ticker")
+                    ],
+                )
+                total_created += sum(1 for obj in result if obj._state.adding)
+                total_updated += len(result) - total_created
 
             self.stdout.write(
-                self.style.SUCCESS(
-                    f"Finished fetching data. Created: {nb_created}, Updated: {nb_updated}"
-                )
+                self.style.SUCCESS(f"Done. Seeded {total_created} records.")
             )
 
         except Exception as e:
