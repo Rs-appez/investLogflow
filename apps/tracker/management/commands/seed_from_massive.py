@@ -60,7 +60,9 @@ class Command(BaseCommand):
                 total_updated += len(result) - total_created
 
             self.stdout.write(
-                self.style.SUCCESS(f"Done. Seeded {total_created} records.")
+                self.style.SUCCESS(
+                    f"Done. Seeded {total_created} records, updated {total_updated} records."
+                )
             )
 
         except Exception as e:
