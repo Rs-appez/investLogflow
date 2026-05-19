@@ -37,6 +37,7 @@ class Command(BaseCommand):
                     Stock(
                         name=item.get("name", ""),
                         ticker=item.get("ticker", ""),
+                        type=item.get("type", ""),
                         active=item.get("active", False),
                         cik=item.get("cik", ""),
                         currency=item.get("currency", ""),
