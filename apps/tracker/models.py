@@ -7,7 +7,12 @@ from apps.users.models import Organization
 
 class FinancialProduct(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
+    active = models.BooleanField()
+    cik = models.CharField(max_length=20)
+    currency = models.CharField(max_length=10)
+    primary_exchange = models.CharField(max_length=255)
+    composite_figi = models.CharField(max_length=12)
+    share_class_figi = models.CharField(max_length=12)
 
     @override
     def __str__(self):
