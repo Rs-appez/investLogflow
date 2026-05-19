@@ -1,0 +1,3 @@
+from .fetch_financial_products_from_massive import fetch_financial_products_from_massive
+
+__all__ = ["fetch_financial_products_from_massive"]
