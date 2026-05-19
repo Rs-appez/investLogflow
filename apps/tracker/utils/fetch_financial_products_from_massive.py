@@ -14,7 +14,7 @@ def fetch_financial_products_from_massive() -> Generator[dict[str, object], None
     while url:
         try:
             response = requests.get(
-                MASSIVE_API_URL,
+                url,
                 params=parameters,
                 timeout=10,
             )
