@@ -1,0 +1,8 @@
+{% extends "layout.html" %}
+{% block title %}All stocks{% endblock %}
+{% block content %}
+    <h1 class="text-3xl font-bold m-4">Stocks List</h1>
+    <div class="overflow-x-auto rounded-box border border-base-content/20 shadow-lg mx-4 mt-2 mb-1">
+        {% include "tracker/partials/stocks_table.html" with stocks=stocks %}
+    </div>
+{% endblock %}
