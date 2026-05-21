@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     "apps.tracker",
     "apps.users",
 ]
+if DEBUG:
+    INSTALLED_APPS += ["django_browser_reload", "django_watchfiles"]  # pyright: ignore[reportConstantRedefinition]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -57,6 +59,10 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+if DEBUG:
+    MIDDLEWARE += [  # pyright: ignore[reportConstantRedefinition]
+        "django_browser_reload.middleware.BrowserReloadMiddleware",
+    ]
 
 ROOT_URLCONF = "investLogFlow.urls"
 
