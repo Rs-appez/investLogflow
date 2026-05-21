@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>
+            {% block title %}Invest Log Flow{% endblock %}
+        </title>
+        <link rel="stylesheet" href="{% static 'css/base.css' %}" />
+        {% block extra_css %}{% endblock %}
+        <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"
+                integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz"
+                crossorigin="anonymous"
+                defer></script>
+        <script src="{% static 'js/base.js' %}" defer></script>
+        {% block extra_js %}{% endblock %}
+    </head>
+    <body>
+        <nav>
+        </nav>
+        <main>
+            {% block content %}{% endblock %}
+        </main>
+    </body>
+</html>
