@@ -1,6 +1,6 @@
-<div class="navbar">
-    <div class="navbar-left">
-        <a href="{% url 'home' %}">Home</a>
+<div class="navbar bg-base-100 shadow-sm px-4">
+    <div class="navbar-start">
+        <a href="{% url 'home' %}" class="btn btn-ghost text-xl font-bold">InvestLogFlow</a>
     </div>
-    <div class="navbar-right">{% include "loginbar.html" %}</div>
+    <div class="navbar-end">{% include "loginbar.html" %}</div>
 </div>
