@@ -1,7 +1,8 @@
 <div class="navbar bg-base-200 shadow-sm px-4">
     <div class="navbar-start">
-        <a href="{% url 'home' %}" class="btn btn-ghost text-xl font-bold">InvestLogFlow</a>
-        <a href="{% url 'stocks' %}" class="btn btn-ghost">Stocks</a>
+        <a href="{% url 'tracker:home' %}"
+           class="btn btn-ghost text-xl font-bold">InvestLogFlow</a>
+        <a href="{% url 'tracker:stocks' %}" class="btn btn-ghost">Stocks</a>
     </div>
     <div class="navbar-end">{% include "loginbar.html" %}</div>
     {% include "toggleDarkModeBtn.html" %}
