@@ -1,5 +1,9 @@
 {% extends "layout.html" %}
+{% load static %}
 {% block title %}All stocks{% endblock %}
+{% block extra_js %}
+    <script src="{% static 'tracker/js/modal.js' %}" module></script>
+{% endblock %}
 {% block content %}
     <h1 class="text-3xl font-bold m-4">Stocks List</h1>
     <div class="overflow-x-auto rounded-box border border-base-content/20 shadow-lg mx-4 mt-2 mb-1">
@@ -15,4 +19,5 @@
                value="{{ request.GET.search|default:'' }}">
         {% include "tracker/partials/stocks_table.html" with stocks=stocks %}
     </div>
+    <dialog id="stock-buy-modal" class="modal" closedby="any"></dialog>
 {% endblock %}

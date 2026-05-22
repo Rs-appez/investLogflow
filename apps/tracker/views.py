@@ -46,3 +46,9 @@ def all_stocks(request):
         response["HX-Push-Url"] = new_url
 
     return response
+
+
+@login_required
+def buy_stock_detail(request, stock_id):
+    stock = Stock.objects.get(id=stock_id)
+    return render(request, f"{tracker_partials}/stock_buy_modal.html", {"stock": stock})

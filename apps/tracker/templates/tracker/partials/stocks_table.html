@@ -80,7 +80,10 @@
         </thead>
         <tbody>
             {% for stock in stocks %}
-                <tr class="hover:bg-base-300 border-b border-base-content/10 transition-colors duration-150">
+                <tr class="hover:bg-base-300 border-b border-base-content/10 transition-colors duration-150"
+                    hx-get="{% url 'tracker:buy_stock_detail' stock.id %}"
+                    hx-target="#stock-buy-modal"
+                    hx-swap="innerHTML">
                     <td>
                         <span class="badge badge-primary badge-outline font-bold">{{ stock.ticker }}</span>
                     </td>
