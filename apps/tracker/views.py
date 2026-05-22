@@ -25,6 +25,8 @@ def all_stocks(request):
         Q(name__icontains=search)
         | Q(cik__icontains=search)
         | Q(ticker__icontains=search)
+        | Q(composite_figi__icontains=search)
+        | Q(share_class_figi__icontains=search)
     ).order_by(F(sort).asc(nulls_last=True) if order else F(sort).desc(nulls_last=True))
     paginator = Paginator(stocks_query, pagesize)
     stocks = paginator.get_page(page)
