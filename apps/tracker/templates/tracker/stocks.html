@@ -10,6 +10,7 @@
                hx-target="#stocks-container"
                hx-swap="innerHTML"
                hx-trigger="keyup changed delay:500ms"
+               hx-vals='{"page": 1}'
                name="search"
                value="{{ request.GET.search|default:'' }}">
         {% include "tracker/partials/stocks_table.html" with stocks=stocks %}
