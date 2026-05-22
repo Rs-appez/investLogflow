@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import F, Q
+from django.http import HttpResponseForbidden
 from django.shortcuts import render
 
 from .models import Stock
@@ -50,5 +51,7 @@ def all_stocks(request):
 
 @login_required
 def buy_stock_detail(request, stock_id):
+    if not request.headers.get("HX-Request"):
+        return HttpResponseForbidden("This endpoint is only accessible via HTMX.")
     stock = Stock.objects.get(id=stock_id)
     return render(request, f"{tracker_partials}/stock_buy_modal.html", {"stock": stock})
