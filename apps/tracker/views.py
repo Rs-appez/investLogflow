@@ -4,6 +4,8 @@ from django.db.models import F, Q
 from django.http import HttpResponseForbidden
 from django.shortcuts import render
 
+from utils.decorators import htmx_required
+
 from .models import Stock
 
 tracker_app = "tracker"
@@ -50,8 +52,7 @@ def all_stocks(request):
 
 
 @login_required
+@htmx_required
 def buy_stock_detail(request, stock_id):
-    if not request.headers.get("HX-Request"):
-        return HttpResponseForbidden("This endpoint is only accessible via HTMX.")
     stock = Stock.objects.get(id=stock_id)
     return render(request, f"{tracker_partials}/stock_buy_modal.html", {"stock": stock})
