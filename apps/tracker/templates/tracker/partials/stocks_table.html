@@ -27,12 +27,55 @@
     <table class="table w-full table-zebra table-fixed">
         <thead>
             <tr class="bg-primary text-primary-content text-sm uppercase tracking-wider">
-                <th class="py-4 w-5 ">Ticker</th>
-                <th class="py-4 w-10">Cik</th>
-                <th class="py-4 w-60">Name</th>
-                <th class="py-4 w-5">Type</th>
-                <th class="py-4 w-10">Composite Figi</th>
-                <th class="py-4 w-10">Share Class Figi</th>
+                <th class="py-4 w-5 ">
+                    <span class="cursor-pointer"
+                          hx-get=""
+                          hx-target="#stocks-container"
+                          hx-swap="innerHTML"
+                          hx-vals='{"sort": "ticker", "order": "{% if request.GET.sort == "ticker" and request.GET.order == "asc" %}desc{% else %}asc{% endif %}"}'>
+                    Ticker</span>
+                </th>
+                <th class="py-4 w-10">
+                    <span class="cursor-pointer"
+                          hx-get=""
+                          hx-target="#stocks-container"
+                          hx-swap="innerHTML"
+                          hx-vals='{"sort": "cik", "order": "{% if request.GET.sort == "cik" and request.GET.order == "asc" %}desc{% else %}asc{% endif %}"}'>
+                    Cik</span>
+                </th>
+                <th class="py-4 w-60">
+                    <span class="cursor-pointer"
+                          hx-get=""
+                          hx-target="#stocks-container"
+                          hx-swap="innerHTML"
+                          hx-vals='{"sort": "name", "order": "{% if request.GET.sort == "name" and request.GET.order == "asc" %}desc{% else %}asc{% endif %}"}'>
+                    Name</span>
+                </th>
+                <th class="py-4 w-5">
+                    <span class="cursor-pointer"
+                          hx-get=""
+                          hx-target="#stocks-container"
+                          hx-swap="innerHTML"
+                          hx-vals='{"sort": "type", "order": "{% if request.GET.sort == "type" and request.GET.order == "asc" %}desc{% else %}asc{% endif %}"}'>
+                        Type
+                    </span>
+                </th>
+                <th class="py-4 w-10">
+                    <span class="cursor-pointer"
+                          hx-get=""
+                          hx-target="#stocks-container"
+                          hx-swap="innerHTML"
+                          hx-vals='{"sort": "composite_figi", "order": "{% if request.GET.sort == "composite_figi" and request.GET.order == "asc" %}desc{% else %}asc{% endif %}"}'>
+                    Composite Figi</span>
+                </th>
+                <th class="py-4 w-10">
+                    <span class="cursor-pointer"
+                          hx-get=""
+                          hx-target="#stocks-container"
+                          hx-swap="innerHTML"
+                          hx-vals='{"sort": "share_class_figi", "order": "{% if request.GET.sort == "share_class_figi" and request.GET.order == "asc" %}desc{% else %}asc{% endif %}"}'>
+                    Share Class Figi</span>
+                </th>
             </tr>
         </thead>
         <tbody>
