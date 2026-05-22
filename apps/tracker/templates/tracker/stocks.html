@@ -3,6 +3,15 @@
 {% block content %}
     <h1 class="text-3xl font-bold m-4">Stocks List</h1>
     <div class="overflow-x-auto rounded-box border border-base-content/20 shadow-lg mx-4 mt-2 mb-1">
+        <input type="text"
+               placeholder="Type here to search..."
+               class="input input-bordered w-full mb-1"
+               hx-get=""
+               hx-target="#stocks-container"
+               hx-swap="innerHTML"
+               hx-trigger="keyup changed delay:500ms"
+               name="search"
+               value="{{ request.GET.search|default:'' }}">
         {% include "tracker/partials/stocks_table.html" with stocks=stocks %}
     </div>
 {% endblock %}
