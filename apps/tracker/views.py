@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import F
 from django.shortcuts import render
 
 from .models import Stock
@@ -17,11 +18,26 @@ def home(request):
 def all_stocks(request):
     pagesize = 20
     page = request.GET.get("page", 1)
-    paginator = Paginator(Stock.objects.all(), pagesize)
+    sort = request.GET.get("sort", "ticker")
+    order = request.GET.get("order", "asc") == "asc"
+    stocks_query = Stock.objects.order_by(
+        F(sort).asc(nulls_last=True) if order else F(sort).desc(nulls_last=True)
+    )
+    paginator = Paginator(stocks_query, pagesize)
     stocks = paginator.get_page(page)
     template = (
         f"{tracker_partials}/stocks_table.html"
         if request.headers.get("HX-Request")
         else f"{tracker_app}/stocks.html"
     )
-    return render(request, template, {"stocks": stocks})
+    response = render(
+        request, template, {"stocks": stocks, "sort": sort, "order": order}
+    )
+    if request.headers.get("HX-Request"):
+        params = request.GET.copy()
+        for key in params.keys():
+            params.setlist(key, [params.get(key)])
+        new_url = f"{request.path}?{params.urlencode()}" if params else request.path
+        response["HX-Push-Url"] = new_url
+
+    return response
