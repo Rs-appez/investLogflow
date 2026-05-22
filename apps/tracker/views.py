@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import F
+from django.db.models import F, Q
 from django.shortcuts import render
 
 from .models import Stock
@@ -20,9 +20,12 @@ def all_stocks(request):
     page = request.GET.get("page", 1)
     sort = request.GET.get("sort", "ticker")
     order = request.GET.get("order", "asc") == "asc"
-    stocks_query = Stock.objects.order_by(
-        F(sort).asc(nulls_last=True) if order else F(sort).desc(nulls_last=True)
-    )
+    search = request.GET.get("search", "")
+    stocks_query = Stock.objects.filter(
+        Q(name__icontains=search)
+        | Q(cik__icontains=search)
+        | Q(ticker__icontains=search)
+    ).order_by(F(sort).asc(nulls_last=True) if order else F(sort).desc(nulls_last=True))
     paginator = Paginator(stocks_query, pagesize)
     stocks = paginator.get_page(page)
     template = (
