@@ -1,4 +1,11 @@
-<div>
-  <h2>{{stock.name }}</h2>
-  <p>{{ stock.ticker }}</p>
-</div>
+<dialog id="stock-buy-modal" class="modal">
+  <form method="dialog" class="modal-backdrop"></form>
+  <div class="modal-box">
+    <h2 class="text-lg font-medium text-base-content mb-2">{{ stock.name }}</h2>
+    <p class="text-base-content/70 mb-4">
+      <span class="badge badge-primary badge-outline font-bold"
+        >{{ stock.ticker }}</span
+      >
+    </p>
+  </div>
+</dialog>

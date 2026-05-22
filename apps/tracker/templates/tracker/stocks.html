@@ -19,5 +19,5 @@
                value="{{ request.GET.search|default:'' }}">
         {% include "tracker/partials/stocks_table.html" with stocks=stocks %}
     </div>
-    <dialog id="stock-buy-modal" class="modal" closedby="any"></dialog>
+    <div id="stock-buy-modal-container"></div>
 {% endblock %}
