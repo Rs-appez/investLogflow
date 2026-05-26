@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import F, Q
+from django.db.models import F, Q, Count
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
@@ -58,9 +58,15 @@ def all_portfolios(request):
     sort = request.GET.get("sort", "name")
     search = request.GET.get("search", "")
 
-    portfolios_query = Portfolio.objects.filter(
-        organization__members=request.user, name__icontains=search
-    ).order_by(F(sort).asc(nulls_last=True) if order else F(sort).desc(nulls_last=True))
+    portfolios_query = (
+        Portfolio.objects.filter(
+            organization__members=request.user, name__icontains=search
+        )
+        .order_by(
+            F(sort).asc(nulls_last=True) if order else F(sort).desc(nulls_last=True)
+        )
+        .annotate(num_investments=Count("investments"))
+    )
 
     paginator = Paginator(portfolios_query, pagesize)
     portfolios = paginator.get_page(page)

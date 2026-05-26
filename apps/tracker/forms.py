@@ -7,10 +7,11 @@ from apps.users.models import Organization
 class InvestmentForm(ModelForm):
     class Meta:
         model = Investment
-        fields = ["amount_invested", "quantity", "date_invested"]
+        fields = ["amount_invested", "quantity", "portfolio", "date_invested"]
         labels = {
             "amount_invested": "Price per Share",
             "quantity": "Quantity",
+            "portfolio": "Portfolio",
             "date_invested": "Date Invested",
         }
         widgets = {
@@ -20,12 +21,20 @@ class InvestmentForm(ModelForm):
             "quantity": NumberInput(
                 attrs={"class": "input input-bordered w-full [appearance:textfield]"}
             ),
+            "portfolio": Select(attrs={"class": "input input-bordered w-full"}),
             "date_invested": DateInput(
                 attrs={"class": "input input-bordered w-full", "type": "date"},
                 format="%Y-%m-%d",
             ),
         }
         input_formats = {"date_invested": ["%Y-%m-%d"]}
+
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user is not None:
+            self.fields["portfolio"].queryset = Portfolio.objects.filter(  # pyright: ignore[reportAttributeAccessIssue]
+                organization__members__in=[user]
+            )
 
 
 class PortfolioForm(ModelForm):
