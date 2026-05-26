@@ -22,7 +22,7 @@ class Stock(models.Model):
         return f"{self.name} ({self.ticker})"
 
 
-class ActualPrice(models.Model):
+class PriceRecord(models.Model):
     product = models.ForeignKey(Stock, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=12, decimal_places=2)
     date_recorded = models.DateTimeField(auto_now_add=True)
