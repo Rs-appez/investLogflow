@@ -1,0 +1,23 @@
+<dialog id="add-portfolio-modal" class="modal">
+    <div class="modal-box">
+        <div class="flex items-center">
+            <h2 class="text-lg font-medium text-base-content mb-2">{{ stock.name }}</h2>
+        </div>
+        <form method="post"
+              action="{% url 'tracker:add_portfolio' %}"
+              class="flex flex-col gap-4">
+            {% csrf_token %}
+            {% for field in form %}
+                <div>
+                    <label for="{{ field.id_for_label }}" class="block mb-1">{{ field.label }}</label>
+                    {{ field }}
+                    {% if field.errors %}<div class="text-red-500 text-sm mt-1">{{ field.errors|striptags }}</div>{% endif %}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
