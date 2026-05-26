@@ -1,6 +1,7 @@
 from typing import override
 
 from django.db import models
+from django.utils import timezone
 
 from apps.users.models import Organization
 
@@ -35,7 +36,7 @@ class Investment(models.Model):
     product = models.ForeignKey(Stock, on_delete=models.CASCADE)
     amount_invested = models.DecimalField(max_digits=12, decimal_places=2)
     quantity = models.DecimalField(max_digits=24, decimal_places=6)
-    date_invested = models.DateTimeField(auto_now_add=True)
+    date_invested = models.DateTimeField(default=timezone.now)
 
     @override
     def __str__(self):
