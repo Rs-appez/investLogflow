@@ -39,9 +39,7 @@ def all_stocks(request):
         if request.headers.get("HX-Request")
         else f"{tracker_app}/stocks.html"
     )
-    response = render(
-        request, template, {"stocks": stocks, "sort": sort, "order": order}
-    )
+    response = render(request, template, {"stocks": stocks})
     if request.headers.get("HX-Request"):
         params = request.GET.copy()
         for key in params.keys():
