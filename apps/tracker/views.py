@@ -7,7 +7,7 @@ from django.views.decorators.http import require_POST
 from apps.tracker.forms import InvestmentForm
 from utils.decorators import htmx_required
 
-from .models import Stock
+from .models import Portfolio, Stock
 
 tracker_app = "tracker"
 tracker_partials = f"{tracker_app}/partials"
@@ -41,6 +41,34 @@ def all_stocks(request):
     )
     response = render(
         request, template, {"stocks": stocks, "sort": sort, "order": order}
+    )
+    if request.headers.get("HX-Request"):
+        params = request.GET.copy()
+        for key in params.keys():
+            params.setlist(key, [params.get(key)])
+        new_url = f"{request.path}?{params.urlencode()}" if params else request.path
+        response["HX-Push-Url"] = new_url
+
+    return response
+
+
+@login_required
+def all_portfolios(request):
+    pagesize = 20
+    order = request.GET.get("order", "asc") == "asc"
+    page = request.GET.get("page", 1)
+    sort = request.GET.get("sort", "name")
+    search = request.GET.get("search", "")
+
+    portfolios_query = Portfolio.objects.filter(
+        organization__members=request.user, name__icontains=search
+    ).order_by(F(sort).asc(nulls_last=True) if order else F(sort).desc(nulls_last=True))
+
+    paginator = Paginator(portfolios_query, pagesize)
+    portfolios = paginator.get_page(page)
+
+    response = render(
+        request, f"{tracker_app}/portfolios.html", {"portfolios": portfolios}
     )
     if request.headers.get("HX-Request"):
         params = request.GET.copy()

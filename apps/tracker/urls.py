@@ -6,6 +6,7 @@ app_name = "tracker"
 urlpatterns = [
     path("", views.home, name="home"),
     path("stocks/", views.all_stocks, name="stocks"),
+    path("portfolios/", views.all_portfolios, name="portfolios"),
 ]
 
 # POST endpoints

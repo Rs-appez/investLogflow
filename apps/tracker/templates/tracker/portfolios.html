@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+{% block title %}Portfolio{% endblock %}
+{% block content %}
+    <h1 class="text-3xl font-bold m-4">Portfolios</h1>
+    <div id="portfolios-container">
+        <div class="flex justify-center items-center gap-2 m-4">
+            <div class="flex items-center justify-center gap-2 mt-4">
+                <button hx-get=""
+                        hx-target="#portfolios-container"
+                        hx-swap="innerHTML"
+                        {% if not portfolios.has_previous %}disabled {% else %}hx-vals='{"page": "{{ portfolios.previous_page_number }}"}'{% endif %}
+                        class="btn btn-sm">«</button>
+                <input type="number"
+                       value="{{ portfolios.number }}"
+                       name="page"
+                       min="1"
+                       max="{{ portfolios.paginator.num_pages }}"
+                       hx-get=""
+                       hx-target="#portfolios-container"
+                       hx-swap="innerHTML"
+                       hx-trigger="change"
+                       class="input input-sm w-16 text-center [appearance:textfield]">
+                <span>of {{ portfolios.paginator.num_pages }}</span>
+                <button hx-get=""
+                        hx-target="#portfolios-container"
+                        hx-swap="innerHTML"
+                        {% if not portfolios.has_next %}disabled {% else %}hx-vals='{"page": "{{ portfolios.next_page_number }}"}'{% endif %}
+                        class="btn btn-sm">»</button>
+            </div>
+        </div>
+        <table class="table w-full table-zebra table-fixed">
+            <thead>
+                <tr class="bg-primary text-primary-content text-sm uppercase tracking-wider">
+                    <th class="py-4 w-40">
+                        <span class="cursor-pointer"
+                              hx-get=""
+                              hx-target="#portfolios-container"
+                              hx-swap="innerHTML"
+                              hx-vals='{"sort": "name", "order": "{% if request.GET.sort == "name" and request.GET.order == "asc" %}desc{% else %}asc{% endif %}"}'>
+                            Name
+                        </span>
+                    </th>
+                    <th class="py-4 w-40">
+                        <span class="cursor-pointer"
+                              hx-get=""
+                              hx-target="#portfolios-container"
+                              hx-swap="innerHTML"
+                              hx-vals='{"sort": "organization__name", "order": "{% if request.GET.sort == "organization__name" and request.GET.order == "asc" %}desc{% else %}asc{% endif %}"}'>
+                            Organization
+                        </span>
+                    </th>
+                    <th class="py-4 w-20">
+                        <span># Assets</span>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for portfolio in portfolios %}
+                    <tr class="hover:bg-base-300 border-b border-base-content/10 transition-colors duration-150">
+                        <td class="font-medium">{{ portfolio.name }}</td>
+                        <td class="font-medium">{{ portfolio.organization.name }}</td>
+                        <td class="font-mono text-center">{{ portfolio.investments.count }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
