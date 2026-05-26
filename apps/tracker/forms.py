@@ -7,6 +7,11 @@ class InvestmentForm(ModelForm):
     class Meta:
         model = Investment
         fields = ["amount_invested", "quantity", "date_invested"]
+        labels = {
+            "amount_invested": "Price per Share",
+            "quantity": "Quantity",
+            "date_invested": "Date Invested",
+        }
         widgets = {
             "amount_invested": NumberInput(
                 attrs={"class": "input input-bordered w-full [appearance:textfield]"}
