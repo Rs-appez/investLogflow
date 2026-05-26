@@ -24,12 +24,16 @@ class Stock(models.Model):
 
 class PriceRecord(models.Model):
     product = models.ForeignKey(Stock, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=12, decimal_places=2)
+    open_price = models.DecimalField(max_digits=12, decimal_places=2)
+    high_price = models.DecimalField(max_digits=12, decimal_places=2)
+    low_price = models.DecimalField(max_digits=12, decimal_places=2)
+    close_price = models.DecimalField(max_digits=12, decimal_places=2)
+    volume = models.BigIntegerField()
     date_recorded = models.DateTimeField(auto_now_add=True)
 
     @override
     def __str__(self):
-        return f"Price of {self.product.name} on {self.date_recorded}: {self.price}"
+        return f"Price of {self.product.name} on {self.date_recorded}"
 
 
 class Portfolio(models.Model):
