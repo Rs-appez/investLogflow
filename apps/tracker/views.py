@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import F, Q
-from django.http import HttpResponseForbidden
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.http import require_POST
 
 from apps.tracker.forms import InvestmentForm
 from utils.decorators import htmx_required
@@ -62,3 +62,15 @@ def buy_stock_detail(request, stock_id):
         f"{tracker_partials}/stock_buy_modal.html",
         {"stock": stock, "form": investment_form},
     )
+
+
+@login_required
+@require_POST
+def buy_stock(request, stock_id):
+    stock = get_object_or_404(Stock, id=stock_id)
+    form = InvestmentForm(request.POST)
+    if form.is_valid():
+        investment = form.save(commit=False)
+        investment.product = stock
+        investment.save()
+    return redirect("tracker:stocks")

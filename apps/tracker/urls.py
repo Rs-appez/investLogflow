@@ -8,6 +8,11 @@ urlpatterns = [
     path("stocks/", views.all_stocks, name="stocks"),
 ]
 
+# POST endpoints
+urlpatterns += [
+    path("stocks/buy/<int:stock_id>/", views.buy_stock, name="buy_stock"),
+]
+
 # HTMX endpoints
 urlpatterns += [
     path(
