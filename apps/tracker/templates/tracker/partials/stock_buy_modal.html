@@ -6,7 +6,9 @@
             </p>
             <h2 class="text-lg font-medium text-base-content mb-2">{{ stock.name }}</h2>
         </div>
-        <form method="post" class="flex flex-col gap-4">
+        <form method="post"
+              action="{% url 'tracker:buy_stock' stock.id %}"
+              class="flex flex-col gap-4">
             {% csrf_token %}
             {% for field in form %}
                 <div>
