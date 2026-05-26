@@ -27,6 +27,7 @@ environ.Env.read_env(env_file)
 
 SECRET_KEY = env("SECRET_KEY")
 MASSIVE_API_KEY = env("MASSIVE_API_KEY")
+ALPHA_VANTAGE_API_KEY = env("ALPHA_VANTAGE_API_KEY")
 
 DEBUG = env.bool("DEBUG", default=False)
 
