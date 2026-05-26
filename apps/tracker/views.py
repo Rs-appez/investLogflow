@@ -4,7 +4,7 @@ from django.db.models import F, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from apps.tracker.forms import InvestmentForm
+from apps.tracker.forms import InvestmentForm, PortfolioForm
 from utils.decorators import htmx_required
 
 from .models import Portfolio, Stock
@@ -65,8 +65,16 @@ def all_portfolios(request):
     paginator = Paginator(portfolios_query, pagesize)
     portfolios = paginator.get_page(page)
 
+    add_form = PortfolioForm(user=request.user)
+
+    template = (
+        f"{tracker_partials}/portfolios_table.html"
+        if request.headers.get("HX-Request")
+        else f"{tracker_app}/portfolios.html"
+    )
+
     response = render(
-        request, f"{tracker_app}/portfolios.html", {"portfolios": portfolios}
+        request, template, {"portfolios": portfolios, "add_form": add_form}
     )
     if request.headers.get("HX-Request"):
         params = request.GET.copy()
@@ -100,3 +108,12 @@ def buy_stock(request, stock_id):
         investment.product = stock
         investment.save()
     return redirect("tracker:stocks")
+
+
+@login_required
+@require_POST
+def add_portfolio(request):
+    form = PortfolioForm(request.POST, user=request.user)
+    if form.is_valid():
+        _ = form.save()
+    return redirect("tracker:portfolios")

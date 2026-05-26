@@ -12,6 +12,7 @@ urlpatterns = [
 # POST endpoints
 urlpatterns += [
     path("stocks/buy/<int:stock_id>/", views.buy_stock, name="buy_stock"),
+    path("portfolios/create/", views.add_portfolio, name="add_portfolio"),
 ]
 
 # HTMX endpoints
