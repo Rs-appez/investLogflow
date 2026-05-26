@@ -1,6 +1,7 @@
-from django.forms import ModelForm, NumberInput, DateInput
+from django.forms import ModelForm, NumberInput, DateInput, Select, TextInput, Textarea
 
-from apps.tracker.models import Investment
+from apps.tracker.models import Investment, Portfolio
+from apps.users.models import Organization
 
 
 class InvestmentForm(ModelForm):
@@ -25,3 +26,28 @@ class InvestmentForm(ModelForm):
             ),
         }
         input_formats = {"date_invested": ["%Y-%m-%d"]}
+
+
+class PortfolioForm(ModelForm):
+    class Meta:
+        model = Portfolio
+        fields = ["name", "description", "organization"]
+        labels = {
+            "name": "Portfolio Name",
+            "organization": "Organization",
+            "description": "Description",
+        }
+        widgets = {
+            "name": TextInput(attrs={"class": "input input-bordered w-full"}),
+            "organization": Select(attrs={"class": "input input-bordered w-full"}),
+            "description": Textarea(
+                attrs={"class": "textarea textarea-bordered w-full"}
+            ),
+        }
+
+    def __init__(self, *args, user=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user is not None:
+            self.fields["organization"].queryset = Organization.objects.filter(  # pyright: ignore[reportAttributeAccessIssue]
+                members__in=[user]
+            )
