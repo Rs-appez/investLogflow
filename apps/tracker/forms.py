@@ -7,7 +7,7 @@ from apps.users.models import Organization
 class InvestmentForm(ModelForm):
     class Meta:
         model = Investment
-        fields = ["amount_invested", "quantity", "portfolio", "date_invested"]
+        fields = ["amount_invested_per_share", "quantity", "portfolio", "date_invested"]
         labels = {
             "amount_invested": "Price per Share",
             "quantity": "Quantity",
@@ -15,7 +15,7 @@ class InvestmentForm(ModelForm):
             "date_invested": "Date Invested",
         }
         widgets = {
-            "amount_invested": NumberInput(
+            "amount_invested_per_share": NumberInput(
                 attrs={"class": "input input-bordered w-full [appearance:textfield]"}
             ),
             "quantity": NumberInput(

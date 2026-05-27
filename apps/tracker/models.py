@@ -54,7 +54,7 @@ class Portfolio(models.Model):
 
 class Investment(models.Model):
     product = models.ForeignKey(Stock, on_delete=models.CASCADE)
-    amount_invested = models.DecimalField(max_digits=12, decimal_places=2)
+    amount_invested_per_share = models.DecimalField(max_digits=12, decimal_places=2)
     quantity = models.DecimalField(max_digits=24, decimal_places=6)
     portfolio = models.ForeignKey(
         Portfolio, on_delete=models.CASCADE, related_name="investments"
