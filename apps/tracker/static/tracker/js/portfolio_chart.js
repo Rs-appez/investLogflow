@@ -33,7 +33,7 @@ function initChart() {
           backgroundColor: "rgba(255, 159, 64, 0.2)",
 
           tension: 0.1,
-          pointRadius: 5,
+          spanGaps: true,
         },
       ],
     },
