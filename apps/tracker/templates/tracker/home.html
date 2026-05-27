@@ -1,8 +1,7 @@
 {% extends "layout.html" %}
 {% block title %}HOME{% endblock %}
+{% block extra_js %}<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>{% endblock %}
 {% block content %}
     <h1>Welcome to the Home Page</h1>
-    <p>{{ portfolio.all_dates_str }}</p>
-    <p>{{ portfolio.value_per_date_str }}</p>
-    <p>{{ portfolio.buy_per_date_str }}</p>
+    {% include "tracker/partials/home_chart.html" %}
 {% endblock %}

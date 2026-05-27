@@ -1,0 +1,10 @@
+{% load static %}
+{% if not portfolio %}
+    <p>No data available to display the chart.</p>
+{% else %}
+    <div id="home-chart-container"></div>
+    <script type="application/json" id="chart_date">{{ portfolio.all_dates_str|safe }}</script>
+    <script type="application/json" id="chart_value">{{ portfolio.value_per_date_str|safe }}</script>
+    <script type="application/json" id="chart_buy">{{ portfolio.buy_per_date_str|safe }}</script>
+    <script src="{% static "tracker/js/portfolio_chart.js" %}" defer></script>
+{% endif %}
