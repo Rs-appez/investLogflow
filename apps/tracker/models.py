@@ -29,7 +29,11 @@ class PriceRecord(models.Model):
     low_price = models.DecimalField(max_digits=12, decimal_places=2)
     close_price = models.DecimalField(max_digits=12, decimal_places=2)
     volume = models.BigIntegerField()
-    date_recorded = models.DateTimeField(auto_now_add=True)
+    date_recorded = models.DateTimeField()
+
+    class Meta:
+        unique_together = ("product", "date_recorded")
+        ordering = ["-date_recorded"]
 
     @override
     def __str__(self):
