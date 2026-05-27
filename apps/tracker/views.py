@@ -15,7 +15,11 @@ tracker_partials = f"{tracker_app}/partials"
 
 @login_required
 def home(request):
-    return render(request, f"{tracker_app}/home.html")
+    organizations = request.user.organizations.all()
+    portfolios = Portfolio.objects.filter(organization__in=organizations)
+    test_portfolio = portfolios.get(name="Port test")
+    test_portfolio.add_price_stats(7)
+    return render(request, f"{tracker_app}/home.html", {"portfolio": test_portfolio})
 
 
 @login_required
