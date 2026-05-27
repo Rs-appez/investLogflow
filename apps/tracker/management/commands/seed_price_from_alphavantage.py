@@ -25,7 +25,7 @@ class Command(BaseCommand):
             )
             return
         try:
-            for stock in Stock.objects.all()[:2]:  # Limit to first 2 stocks for testing
+            for stock in Stock.objects.all()[:1]:  # Limit to first stocks for testing
                 price_data = fetch_price_data_from_alphavantage(
                     stock.ticker
                 )  # Limited api can only make 25 calls per day
