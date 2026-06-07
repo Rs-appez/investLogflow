@@ -25,9 +25,9 @@ environ.Env.read_env(env_file)
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-SECRET_KEY = env("SECRET_KEY")
-MASSIVE_API_KEY = env("MASSIVE_API_KEY")
-ALPHA_VANTAGE_API_KEY = env("ALPHA_VANTAGE_API_KEY")
+SECRET_KEY = env.str("SECRET_KEY", default="insecure-secret-key")
+MASSIVE_API_KEY = env.str("MASSIVE_API_KEY", default="")
+ALPHA_VANTAGE_API_KEY = env.str("ALPHA_VANTAGE_API_KEY", default="")
 
 DEBUG = env.bool("DEBUG", default=False)
 
@@ -92,6 +92,15 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": BASE_DIR / "db.sqlite3",
+    }
+    if DEBUG
+    else {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env.str("POSTGRES_DB", default=""),
+        "USER": env.str("POSTGRES_USER", default=""),
+        "PASSWORD": env.str("POSTGRES_PASSWORD", default=""),
+        "HOST": env.str("POSTGRES_HOST", default=""),
+        "PORT": env.str("POSTGRES_PORT", default=""),
     }
 }
 
