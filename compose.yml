@@ -1,0 +1,61 @@
+services:
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: investLogFlow-nginx
+    ports:
+      - "80:8080"
+    volumes:
+      - static_files:/usr/share/nginx/html/static:ro,z
+      - media_files:/usr/share/nginx/html/media:ro,z
+
+    networks:
+      - internal-network
+      - default
+
+    depends_on:
+      - investlogflow
+
+    restart: unless-stopped
+
+  investlogflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: investLogFlow-app
+
+    env_file: .env.prod
+    volumes:
+      - static_files:/app/staticfiles:rw
+      - media_files:/app/media:rw
+    networks:
+      - internal-network
+
+    depends_on:
+      - postgres
+
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:alpine
+    container_name: investLogFlow-postgres
+    env_file: .env.db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - internal-network
+
+volumes:
+  static_files:
+  media_files:
+  postgres_data:
+
+networks:
+  default:
+    name: investlogflow-default-network
+    driver: bridge
+  internal-network:
+    name: investlogflow-internal-network
+    internal: true
