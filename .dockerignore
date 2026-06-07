@@ -1,5 +1,17 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+db.sqlite3
+
 .venv/
 .git/
 nginx/
 
-db.sqlite3
+.env
+.env.*
+
