@@ -22,4 +22,9 @@ urlpatterns += [
         views.buy_stock_detail,
         name="buy_stock_detail",
     ),
+    path(
+        "portfolios/home_chart",
+        views.portfolio_home_chart,
+        name="home_chart",
+    ),
 ]

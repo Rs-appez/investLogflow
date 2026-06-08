@@ -3,5 +3,20 @@
 {% block extra_js %}<script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>{% endblock %}
 {% block content %}
     <h1>Welcome to the Home Page</h1>
-    {% include "tracker/partials/home_chart.html" %}
+    <div class="form-control w-full max-w-xs">
+        <label class="label">
+            <span class="label-text">Portfolio</span>
+        </label>
+        <select class="select select-bordered"
+                name="portfolio"
+                hx-get="{% url 'tracker:home_chart' %}"
+                hx-target="#chart-container"
+                hx-include="this"
+                hx-trigger="change,load"
+                hx-swap="innerHTML">
+            <option disabled selected>Choose your portfolio</option>
+            {% for portfolio in portfolios %}<option value="{{ portfolio.id }}">{{ portfolio.name }}</option>{% endfor %}
+        </select>
+    </div>
+    <div id="chart-container"></div>
 {% endblock %}

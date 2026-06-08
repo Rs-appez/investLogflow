@@ -17,9 +17,7 @@ tracker_partials = f"{tracker_app}/partials"
 def home(request):
     organizations = request.user.organizations.all()
     portfolios = Portfolio.objects.filter(organization__in=organizations)
-    test_portfolio = portfolios.get(name="Port test")
-    test_portfolio.add_price_stats(7)
-    return render(request, f"{tracker_app}/home.html", {"portfolio": test_portfolio})
+    return render(request, f"{tracker_app}/home.html", {"portfolios": portfolios})
 
 
 @login_required
@@ -105,6 +103,23 @@ def buy_stock_detail(request, stock_id):
         request,
         f"{tracker_partials}/stock_buy_modal.html",
         {"stock": stock, "form": investment_form},
+    )
+
+
+@login_required
+@htmx_required
+def portfolio_home_chart(request):
+    portfolio_id = request.GET.get("portfolio")
+    portfolio = get_object_or_404(Portfolio, id=portfolio_id)
+    if not portfolio.organization.members.filter(id=request.user.id).exists():
+        return render(
+            request, f"{tracker_partials}/home_chart.html", {"portfolio": None}
+        )
+    portfolio.add_price_stats(7)
+    return render(
+        request,
+        f"{tracker_partials}/home_chart.html",
+        {"portfolio": portfolio},
     )
 
 
